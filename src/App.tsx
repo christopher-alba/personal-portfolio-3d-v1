@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { DefaultTheme, ThemeProvider } from "styled-components";
+import { useEffect, useState } from "react";
+import themes from "./themes/schema.json";
+import { Route, Routes } from "react-router-dom";
+import Landing from "./pages/Landing/Landing";
+import { GlobalStyles } from "./themes/globalStyles";
+import MyServices from "./pages/MyServices/MyServices";
+const App = () => {
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme")?.length ?? -1 > 0
+      ? JSON.parse(localStorage.getItem("theme") as string)
+      : themes.light
+  );
 
-function App() {
-  const [count, setCount] = useState(0)
+  const updateTheme = (themeName: string) => {
+    if (themeName === "light") {
+      localStorage.setItem("theme", JSON.stringify(themes.light));
+      setTheme(themes.light);
+    } else {
+      localStorage.setItem("theme", JSON.stringify(themes.dark));
+      setTheme(themes.dark);
+    }
+  };
+
+  useEffect(() => {
+    const localTheme: DefaultTheme | null = JSON.parse(
+      localStorage.getItem("theme") ?? "{}"
+    ) as DefaultTheme | null;
+
+    if (localTheme?.name) {
+      if (localTheme.name === "light") {
+        if (JSON.stringify(themes.light) !== JSON.stringify(localTheme)) {
+          updateTheme("light");
+        }
+      } else if (localTheme.name === "dark") {
+        if (JSON.stringify(themes.dark) !== JSON.stringify(localTheme)) {
+          updateTheme("dark");
+        }
+      }
+    } else {
+      localStorage.setItem("theme", JSON.stringify(themes.light));
+      setTheme(themes.light);
+    }
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <Routes>
+          <Route path="" element={<Landing />} />
+          <Route path="services" element={<MyServices />} />
+        </Routes>
+      </ThemeProvider>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
