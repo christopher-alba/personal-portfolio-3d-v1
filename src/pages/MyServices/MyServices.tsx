@@ -16,7 +16,7 @@ const MyServices: FC = () => {
         duration: 1.5,
       }
     );
-  }, []);
+  },[]);
   return (
     <StyledContainer id="services-container">
       <h1>Services I Provide.</h1>

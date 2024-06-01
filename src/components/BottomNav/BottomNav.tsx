@@ -148,23 +148,38 @@ const BottomNav: FC<{
         <FontAwesomeIconStyled icon={faAnglesLeft} />
       </ArrowButton>
       <ButtonsWrapper>
-        <Button onClick={() => handleButtonLinkClicked("services")}>
+        <Button
+          onClick={() => handleButtonLinkClicked("services")}
+          disabled={location.pathname === "/services"}
+        >
           <FontAwesomeIconStyledMini icon={faUser} />
           Services
         </Button>
-        <Button onClick={() => handleButtonLinkClicked("career")}>
+        <Button
+          onClick={() => handleButtonLinkClicked("career")}
+          disabled={location.pathname === "/career"}
+        >
           <FontAwesomeIconStyledMini icon={faBriefcase} />
           Career
         </Button>
-        <Button onClick={() => handleButtonLinkClicked("technology")}>
+        <Button
+          onClick={() => handleButtonLinkClicked("technology")}
+          disabled={location.pathname === "/technology"}
+        >
           <FontAwesomeIconStyledMini icon={faCode} />
           Technology
         </Button>
-        <Button onClick={() => handleButtonLinkClicked("projects")}>
+        <Button
+          onClick={() => handleButtonLinkClicked("projects")}
+          disabled={location.pathname === "/projects"}
+        >
           <FontAwesomeIconStyledMini icon={faPaintBrush} />
           Projects
         </Button>
-        <Button onClick={() => handleButtonLinkClicked("education")}>
+        <Button
+          onClick={() => handleButtonLinkClicked("education")}
+          disabled={location.pathname === "/education"}
+        >
           <FontAwesomeIconStyledMini icon={faGraduationCap} />
           Education
         </Button>

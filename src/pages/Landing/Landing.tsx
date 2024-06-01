@@ -1,16 +1,13 @@
-import { FC, useLayoutEffect, useRef, useState } from "react";
+import { FC, useRef } from "react";
 import LandingSvg from "../../svg/LandingSvg";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Button, Content, ContentWrapper } from "./styled";
-import TransitionRightSVG from "../../svg/TransitionRightSvg";
-import { useNavigate } from "react-router-dom";
 
-const Landing: FC = () => {
+const Landing: FC<{ handleRightTransition: (path: string) => void }> = ({
+  handleRightTransition,
+}) => {
   const container = useRef();
-  const { contextSafe } = useGSAP({ scope: container });
-  const [transition, setTransition] = useState(false);
-  const navigate = useNavigate();
   useGSAP(() => {
     gsap
       .timeline()
@@ -69,32 +66,6 @@ const Landing: FC = () => {
     });
   });
 
-  const handlePageTransitionRight = contextSafe(() => {
-    setTransition(true);
-    setTimeout(() => {
-      navigate("services");
-    }, 2000);
-  });
-
-  useLayoutEffect(() => {
-    gsap
-      .timeline()
-      .from(["#transition-right-plane", "#transition-right-thrust-gradient"], {
-        x: -10000,
-        duration: 2,
-        opacity: 0.7,
-      })
-      .fromTo(
-        "#transition-right-particle",
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 0,
-        }
-      );
-  }, [transition]);
-
   return (
     <>
       <ContentWrapper ref={container as any}>
@@ -107,11 +78,12 @@ const Landing: FC = () => {
           <h3 style={{ margin: "20px 0" }}>
             This is my online portfolio / website.
           </h3>
-          <Button onClick={handlePageTransitionRight}>Fly!</Button>
+          <Button onClick={() => handleRightTransition("services")}>
+            Fly!
+          </Button>
         </Content>
       </ContentWrapper>
       <LandingSvg />
-      {transition && <TransitionRightSVG />}
     </>
   );
 };

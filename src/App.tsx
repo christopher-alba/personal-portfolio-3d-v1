@@ -20,6 +20,8 @@ const App = () => {
 
   const [transitionLeft, setTransitionLeft] = useState(false);
   const [transitionRight, setTransitionRight] = useState(false);
+  const [hideTransitionLeft, setHideTransitionLeft] = useState(false);
+  const [hideTransitionRight, setHideTransitionRight] = useState(false);
   const container = useRef();
   const { contextSafe } = useGSAP({ scope: container });
   const navigate = useNavigate();
@@ -56,64 +58,80 @@ const App = () => {
   }, []);
 
   useLayoutEffect(() => {
-    gsap
-      .timeline()
-      .fromTo(
-        ["#transition-right-plane", "#transition-right-thrust-gradient"],
-        {
-          x: -10000,
-          duration: 2,
-          opacity: 0.7,
-        },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 2,
-        }
-      )
-      .fromTo(
-        "#transition-right-particle",
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 0,
-        }
-      );
+    gsap.timeline().fromTo(
+      ["#transition-right-plane", "#transition-right-thrust-gradient"],
+      {
+        x: -10000,
+        duration:1.5,
+        opacity: 0.7,
+      },
+      {
+        x: 0,
+        opacity: 1,
+        duration:1.5,
+      }
+    );
   }, [transitionRight]);
 
   useLayoutEffect(() => {
-    gsap
-      .timeline()
-      .fromTo(
-        ["#transition-left-plane", "#transition-left-thrust-gradient"],
-        {
-          x: 10000,
-          duration: 2,
-          opacity: 0.7,
-        },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 2,
-        }
-      )
-      .fromTo(
-        "#transition-left-particle",
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 0,
-        }
-      );
+    gsap.timeline().fromTo(
+      ["#transition-left-plane", "#transition-left-thrust-gradient"],
+      {
+        x: 10000,
+        duration:1.5,
+        opacity: 0.7,
+      },
+      {
+        x: 0,
+        opacity: 1,
+        duration:1.5,
+      }
+    );
   }, [transitionLeft]);
+
+  useLayoutEffect(() => {
+    if (!hideTransitionRight) return;
+    gsap.timeline().fromTo(
+      ["#transition-right-plane", "#transition-right-thrust-gradient"],
+      {
+        duration: 2,
+        opacity: 1,
+      },
+      {
+        opacity: 0,
+        duration: 2,
+      }
+    );
+    setTimeout(() => {
+      setTransitionRight(false);
+      setHideTransitionRight(false);
+    }, 2000);
+  }, [hideTransitionRight]);
+
+  useLayoutEffect(() => {
+    if (!hideTransitionLeft) return;
+    gsap.timeline().fromTo(
+      ["#transition-left-plane", "#transition-left-thrust-gradient"],
+      {
+        duration: 2,
+        opacity: 1,
+      },
+      {
+        opacity: 0,
+        duration: 2,
+      }
+    );
+    setTimeout(() => {
+      setTransitionLeft(false);
+      setHideTransitionLeft(false);
+    }, 2000);
+  }, [hideTransitionLeft]);
 
   const handleTransitionLeft = contextSafe((path: string) => {
     setTransitionLeft(true);
     setTimeout(() => {
       navigate(path);
-      setTransitionLeft(false);
+      setHideTransitionLeft(true);
     }, 2000);
   });
 
@@ -121,7 +139,7 @@ const App = () => {
     setTransitionRight(true);
     setTimeout(() => {
       navigate(path);
-      setTransitionRight(false);
+      setHideTransitionRight(true);
     }, 2000);
   });
 
@@ -130,7 +148,10 @@ const App = () => {
       <div>
         <GlobalStyles />
         <Routes>
-          <Route path="" element={<Landing />} />
+          <Route
+            path=""
+            element={<Landing handleRightTransition={handleTransitionRight} />}
+          />
           <Route path="services" element={<MyServices />} />
         </Routes>
         <BottomNav
