@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const Landing: FC = () => {
   const container = useRef();
-  const [transition, setTransition] = useState(false);
   const { contextSafe } = useGSAP({ scope: container });
+  const [transition, setTransition] = useState(false);
   const navigate = useNavigate();
   useGSAP(() => {
     gsap
