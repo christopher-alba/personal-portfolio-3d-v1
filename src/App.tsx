@@ -15,7 +15,7 @@ const App = () => {
   const [theme, setTheme] = useState(
     localStorage.getItem("theme")?.length ?? -1 > 0
       ? JSON.parse(localStorage.getItem("theme") as string)
-      : themes.dark
+      : themes.light
   );
 
   const [transitionLeft, setTransitionLeft] = useState(false);
@@ -52,8 +52,8 @@ const App = () => {
         }
       }
     } else {
-      localStorage.setItem("theme", JSON.stringify(themes.dark));
-      setTheme(themes.dark);
+      localStorage.setItem("theme", JSON.stringify(themes.light));
+      setTheme(themes.light);
     }
   }, []);
 

@@ -3,6 +3,7 @@ import LandingSvg from "../../svg/LandingSvg";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Button, Content, ContentWrapper } from "./styled";
+import MovingCubes from "../../components/MovingCubes";
 
 const Landing: FC<{ handleRightTransition: (path: string) => void }> = ({
   handleRightTransition,
@@ -83,6 +84,18 @@ const Landing: FC<{ handleRightTransition: (path: string) => void }> = ({
           </Button>
         </Content>
       </ContentWrapper>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: -1,
+        }}
+      >
+        <MovingCubes />
+      </div>
       <LandingSvg />
     </>
   );
